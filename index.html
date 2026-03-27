@@ -19,7 +19,9 @@
 <!-- FIXED DATUMSFELD -->
 <input type="text" id="geburt" placeholder="TTMMJJJJ" inputmode="numeric" oninput="formatGeburt(this)">
 
-<input type="text" id="kontrollschild" placeholder="Kontrollschild" oninput="this.value = this.value.toUpperCase()">
+<input type="text" id="kontrollschild" placeholder="Kontrollschild"
+       oninput="this.value = this.value.toUpperCase()"
+       style="text-transform: uppercase;">
 
 <h2>Kontrollbeginn</h2>
 <p id="startzeit"></p>
