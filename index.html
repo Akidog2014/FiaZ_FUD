@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Testformular</title>
+<style>
+    body { font-family: Arial; padding: 20px; }
+    input, button { margin: 5px 0; padding: 10px; width: 100%; }
+    .hidden { display: none; }
+</style>
+</head>
+<body onload="startZeit()">
+
+<h2>Personendaten</h2>
+<input type="text" id="name" placeholder="Name">
+<input type="text" id="vorname" placeholder="Vorname">
+<input type="date" id="geburt">
+<input type="text" id="kontrollschild" placeholder="Kontrollschild">
+
+<h2>Kontrollbeginn</h2>
+<p id="startzeit"></p>
+
+<h2>Atemalkoholtest 1</h2>
+<button onclick="zeit1()">Atemalkoholtest 1</button>
+<p id="zeit1"></p>
+<input type="text" id="wert1" placeholder="Wert eingeben">
+
+<h2>Atemalkoholtest 2</h2>
+<button onclick="zeit2()">Atemalkoholtest 2</button>
+<p id="zeit2"></p>
+<input type="text" id="wert2" placeholder="Wert eingeben">
+
+<h2>Drogenschnelltest</h2>
+<button onclick="zeit3()">Drogenschnelltest</button>
+<p id="zeit3"></p>
+
+<button onclick="zeigePositiv()">Positiv</button>
+<button onclick="zeigeNegativ()">Negativ</button>
+
+<div id="drogenListe" class="hidden">
+    <p>Auswahl:</p>
+    <label><input type="checkbox" value="Cannabis"> Cannabis</label><br>
+    <label><input type="checkbox" value="Benzodiazepine"> Benzodiazepine</label><br>
+    <label><input type="checkbox" value="Amphetamine"> Amphetamine</label><br>
+    <label><input type="checkbox" value="Kokain"> Kokain</label><br>
+    <label><input type="checkbox" value="Opiate"> Opiate</label>
+</div>
+
+<h2>Absenden</h2>
+<button onclick="sendeMail()">E-Mail senden</button>
+
+<script>
+let start = "", t1="", t2="", t3="", drogenStatus="";
+
+function jetzt() {
+    let d = new Date();
+    let stunden = String(d.getHours()).padStart(2, '0');
+    let minuten = String(d.getMinutes()).padStart(2, '0');
+    return stunden + ":" + minuten;
+}
+
+function startZeit() {
+    start = jetzt();
+    document.getElementById("startzeit").innerText = start;
+}
+
+function zeit1() {
+    t1 = jetzt();
+    document.getElementById("zeit1").innerText = t1;
+}
+
+function zeit2() {
+    t2 = jetzt();
+    document.getElementById("zeit2").innerText = t2;
+}
+
+function zeit3() {
+    t3 = jetzt();
+    document.getElementById("zeit3").innerText = t3;
+}
+
+function zeigePositiv() {
+    drogenStatus = "Positiv";
+    document.getElementById("drogenListe").classList.remove("hidden");
+}
+
+function zeigeNegativ() {
+    drogenStatus = "Negativ";
+    document.getElementById("drogenListe").classList.add("hidden");
+}
+
+function sendeMail() {
+    let name = document.getElementById("name").value;
+    let vorname = document.getElementById("vorname").value;
+    let geburtRaw = document.getElementById("geburt").value;
+    let kontrollschild = document.getElementById("kontrollschild").value;
+
+    let geburt = "";
+    if (geburtRaw) {
+        let parts = geburtRaw.split("-");
+        geburt = parts[2] + "." + parts[1] + "." + parts[0];
+    }
+
+    let wert1 = document.getElementById("wert1").value;
+    let wert2 = document.getElementById("wert2").value;
+
+    let ausgewählt = [];
+    document.querySelectorAll("#drogenListe input:checked").forEach(el => {
+        ausgewählt.push(el.value);
+    });
+
+    let text =
+`Kontrollbeginn: ${start}
+
+Name: ${name}
+Vorname: ${vorname}
+Geburtsdatum: ${geburt}
+Kontrollschild: ${kontrollschild}
+
+Atemalkoholtest 1:
+Zeit: ${t1}
+Wert: ${wert1}
+
+Atemalkoholtest 2:
+Zeit: ${t2}
+Wert: ${wert2}
+
+Drogentest:
+Zeit: ${t3}
+Status: ${drogenStatus}
+Substanzen: ${ausgewählt.join(", ")}`;
+
+    window.location.href = "mailto:?subject=Testergebnis&body=" + encodeURIComponent(text);
+}
+</script>
+
+</body>
+</html>
