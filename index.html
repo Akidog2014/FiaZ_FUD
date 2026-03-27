@@ -15,7 +15,10 @@
 <h2>Personendaten</h2>
 <input type="text" id="name" placeholder="Name">
 <input type="text" id="vorname" placeholder="Vorname">
-<input type="date" id="geburt">
+
+<!-- FIXED DATUMSFELD -->
+<input type="text" id="geburt" placeholder="TTMMJJJJ" inputmode="numeric" oninput="formatGeburt(this)">
+
 <input type="text" id="kontrollschild" placeholder="Kontrollschild">
 
 <h2>Kontrollbeginn</h2>
@@ -90,17 +93,24 @@ function zeigeNegativ() {
     document.getElementById("drogenListe").classList.add("hidden");
 }
 
+// 🔥 Verbesserte Formatierung (max. 8 Ziffern, Punkte automatisch)
+function formatGeburt(input) {
+    let v = input.value.replace(/\D/g, "").substring(0, 8);
+
+    if (v.length > 4) {
+        input.value = v.substring(0,2) + "." + v.substring(2,4) + "." + v.substring(4);
+    } else if (v.length > 2) {
+        input.value = v.substring(0,2) + "." + v.substring(2);
+    } else {
+        input.value = v;
+    }
+}
+
 function sendeMail() {
     let name = document.getElementById("name").value;
     let vorname = document.getElementById("vorname").value;
-    let geburtRaw = document.getElementById("geburt").value;
+    let geburt = document.getElementById("geburt").value;
     let kontrollschild = document.getElementById("kontrollschild").value;
-
-    let geburt = "";
-    if (geburtRaw) {
-        let parts = geburtRaw.split("-");
-        geburt = parts[2] + "." + parts[1] + "." + parts[0];
-    }
 
     let wert1 = document.getElementById("wert1").value;
     let wert2 = document.getElementById("wert2").value;
