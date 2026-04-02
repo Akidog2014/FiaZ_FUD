@@ -7,12 +7,33 @@
 
 <style>
     body { font-family: Arial; padding: 20px; }
-    input, button { margin: 5px 0; padding: 10px; width: 100%; }
+
+    /* Allgemeine Eingabefelder etwas schmaler */
+    input[type="text"], input[type="time"], select {
+        margin: 5px 0;
+        padding: 5px 8px;       /* kleineres Padding */
+        width: 80%;             /* schmaler als 100% */
+        font-size: 14px;        /* etwas kleinere Schrift */
+    }
+
+    /* Buttons kleiner */
+    button {
+        margin: 5px 0;
+        padding: 6px 12px;      /* kleineres Padding */
+        font-size: 14px;        /* kleinere Schrift */
+        width: auto;            /* Breite nach Inhalt */
+    }
+
     .hidden { display: none; }
 </style>
+
 </head>
 
 <body onload="startZeit()">
+
+<h1 style="text-align:center; margin-bottom: 30px;">
+    Prüfung Fahrfähigkeit
+</h1>
 
 <h2>Personendaten</h2>
 <input type="text" id="name" placeholder="Name">
@@ -36,6 +57,18 @@
 <button onclick="zeit2()">Atemalkoholtest 2</button>
 <p id="zeit2"></p>
 <input type="text" id="wert2" placeholder="Wert eingeben">
+
+<h2>Atemtestgerät</h2>
+<select id="geraet">
+    <option value="">Bitte auswählen</option>
+    <option value="Pil 231, SN.20040130">Pil 231, SN.20040130</option>
+    <option value="Pil 298, SN.18110193">Pil 298, SN.18110193</option>
+    <option value="Pil 296, SN.25550200">Pil 296, SN.25550200</option>
+    <option value="Pil 297, SN.25550199">Pil 297, SN.25550199</option>
+    <option value="Pil 264, SN.24550828">Pil 264, SN.24550828</option>
+    <option value="Pil 265, SN.25550201">Pil 265, SN.25550201</option>
+    <option value="Pil 270, SN.17100221">Pil 270, SN.17100221</option>
+</select>
 
 <h2>Drogenschnelltest</h2>
 <button onclick="zeit3()">Drogenschnelltest</button>
@@ -119,6 +152,7 @@ function weiter() {
 
     let wert1 = document.getElementById("wert1").value;
     let wert2 = document.getElementById("wert2").value;
+    let geraet = document.getElementById("geraet").value;
 
     let ausgewählt = [];
     document.querySelectorAll("#drogenListe input:checked").forEach(el => {
@@ -140,6 +174,7 @@ Wert: ${wert1}
 Atemalkoholtest 2:
 Zeit: ${t2}
 Wert: ${wert2}
+Gerät: ${geraet}
 
 Drogentest:
 Zeit: ${t3}
