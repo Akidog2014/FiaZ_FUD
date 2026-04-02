@@ -47,11 +47,12 @@
     <option value="kurt.lustenberger@lu.ch">Lustenberger Kurt</option>
     <option value="philipp.steinger@lu.ch">Steinger Philipp</option>
     <option value="samuel.bigler@lu.ch">Bigler Samuel</option>
+    <!-- Rest bleibt gleich -->
 </select>
 
 <label>Empfänger 2:</label>
 <select id="empfaenger2">
-    <option value="">-- Optional --</option>
+    <option value="">-- Bitte wählen --</option>
     <option value="marco.wueest@lu.ch">Wüest Marco</option>
     <option value="christof.hufschmid@lu.ch">Hufschmid Christof</option>
     <option value="marcel.ulrich@lu.ch">Ulrich Marcel</option>
@@ -81,6 +82,7 @@
     <option value="kurt.lustenberger@lu.ch">Lustenberger Kurt</option>
     <option value="philipp.steinger@lu.ch">Steinger Philipp</option>
     <option value="samuel.bigler@lu.ch">Bigler Samuel</option>
+    <!-- Rest bleibt gleich -->
 </select>
 
 <button onclick="senden()">E-Mail senden</button>
@@ -88,13 +90,22 @@
 <script>
 function getText() {
     let params = new URLSearchParams(window.location.search);
-    return params.get("text");
+    let text = params.get("text");
+
+    if (!text) {
+        alert("Kein Text empfangen!");
+        return "";
+    }
+
+    return decodeURIComponent(text);
 }
 
 function senden() {
     let e1 = document.getElementById("empfaenger1").value;
     let e2 = document.getElementById("empfaenger2").value;
     let text = getText();
+
+    if (!text) return;
 
     if (!e1 && !e2) {
         alert("Bitte mindestens einen Empfänger auswählen!");
@@ -108,9 +119,13 @@ function senden() {
 
     let empfaengerString = emails.join(";");
 
+    // Wichtig: Zeilenumbrüche korrekt codieren
+    let body = encodeURIComponent(text);
+
     window.location.href =
         "mailto:" + empfaengerString +
-        "?subject=Testergebnis&body=" + encodeURIComponent(text);
+        "?subject=" + encodeURIComponent("Testergebnis") +
+        "&body=" + body;
 }
 </script>
 
